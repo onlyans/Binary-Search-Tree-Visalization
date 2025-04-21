@@ -47,7 +47,7 @@ Using HTML, CSS, and JavaScript, the project uses the element to enable real-t
 - Real-time canvas drawings and animated visualizations.
 - Interactive notifications for missing nodes or duplicate insertion.
 - Neon green and matrix-style appearance with dark feel.
-- Adaptive scaling depending on screen size and tree depth.
+- Adaptive scaling depending on screen size and tree depth. 
 
 ## Educational Value
 For developers and students, this image is a great teaching tool for learning the dynamics and structure of binary search trees.
