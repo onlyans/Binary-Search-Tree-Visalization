@@ -3,7 +3,7 @@
 **Askaruly Orken, Saukynbay Ansar, Muratov Aldiyar, and Daniyal Temirlan**
 
 ## PROJECT LINK:
-**https://github.com/onlyans/Binary-Search-Tree-Visalization** 
+**https://github.com/onlyans/Binary-Search-Tree-Visalization**  
 
 
 
