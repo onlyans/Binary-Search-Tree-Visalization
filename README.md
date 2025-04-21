@@ -10,16 +10,16 @@ In a balanced BST, this invariant enables us to perform efficient operation
 How did we implemented our BST
 Using HTML, CSS, and JavaScript, the project uses the element to enable real-time drawing and animations.
 
-**1.TreeNode Class:**
+**1. TreeNode Class:**
 
 - For drawing, every node contains coordinates (x, y), a value (element), and left and right child pointers.
 - A second 'width' attribute is calculated recursively to control horizontal spacing and tree layout.
 
 **2. BST Class:**
 
--On top of basic function implementation like insert, search, and delete, the BST class holds onto the root.
--A path for visually displaying node addition is returned by insertion.
--Finding an in-order predecessor and establishing proper tree connections is part of removal.
+- On top of basic function implementation like insert, search, and delete, the BST class holds onto the root.
+- A path for visually displaying node addition is returned by insertion.
+- Finding an in-order predecessor and establishing proper tree connections is part of removal.
 
 **3. Animation Functions**
 
