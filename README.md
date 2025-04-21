@@ -1,48 +1,54 @@
+## Project Documentation: Virtualization of Binary Search Tree
+**Askaruly Orken, Saukynbay Ansar, Muratov Aldiyar, and Daniyal Temirlan**
 
-## Project Documentation: Binary Search Tree Visualization
-
-**Askaruly Orken, Daniyal Temirlan, Muratov Aldiyar, Saukynbay Ansar** 
+## PROJECT LINK:
+**https://github.com/onlyans/Binary-Search-Tree-Visalization** 
 
 ## What is a BST?
+A Binary Search Tree (BST) data structure contains a maximum of two children for each node. Every element in the right subtree is greater than the node's value, and every element in the left subtree is less than the node's value.
+In a balanced BST, this invariant enables us to perform efficient operations like search, insertion, and deletion with an average time complexity of O(log n).
+How did we implemented our BST
+Using HTML, CSS, and JavaScript, the project uses the element to enable real-time drawing and animations.
 
-A **Binary Search Tree (BST)** is a type of binary tree where:
-- All elements in the **left subtree** of a node are **less than** the node’s value.
-- All elements in the **right subtree** are **greater than** the node’s value.
+** 1.TreeNode Class: **
 
-This structure allows for efficient operations like **search**, **insertion**, and **deletion** with an average time complexity of `O(log n)`.
+- For drawing, every node contains coordinates (x, y), a value (element), and left and right child pointers.
+- A second 'width' attribute is calculated recursively to control horizontal spacing and tree layout.
 
-## How We Implemented the BST
+** 2. BST Class: **
 
-This project is implemented using **HTML**, **CSS**, and **JavaScript**, featuring live visualization on an HTML `<canvas>`. The core components include:
+-On top of basic function implementation like insert, search, and delete, the BST class holds onto the root.
+-A path for visually displaying node addition is returned by insertion.
+-Finding an in-order predecessor and establishing proper tree connections is part of removal.
 
-- **TreeNode Class**: Represents each node with properties `element`, `left`, `right`, `x`, `y`, and `width`.
-- **BST Class**: Manages the core functionality including:
-  - `insert` – to add new values
-  - `pathTo` – to trace a search path
-  - `removeWithAnimation` – to delete nodes with visual feedback
-  - `getReplacementPath` – to handle complex deletions
+** 3. Animation Functions **
 
-- **Rendering Functions**:
-  - `drawTree`, `drawNode`, `drawLine` – handle visual drawing of nodes and connections.
-  - `assignCoordinates`, `updateCoordinates`, `computeWidths` – calculate node positions for balanced layout.
+- Animations are used to show search paths and traversals.
+- Async/await is used to achieve these using color switches and waits.
+- Highlight effects are used to graphically depict step-by-step in-order, pre-order, and post-order traversals.
 
-- **Animations**:
-  - Search and tree traversals (`inorder`, `preorder`, `postorder`) are animated with color transitions.
-  - Insertions and deletions include smooth motion and highlighting.
+** 4. Coordinate Calculation: **
 
-## Project Features
+- Widths of every subtree are computed to display nodes at proper positions.
+- To provide enough space and prevent overlap, X and Y coordinates are assigned recursively using subtree widths and levels.
 
-- **Interactive UI**:
-  - Input field for entering numbers.
-  - Buttons to `Insert`, `Delete`, and `Search`, plus controls for different tree traversals.
+** 5. Drawing **
 
-- **Live Visualization**:
-  - Color-coded highlights show active operations.
-  - Nodes and branches are drawn dynamically on the canvas.
+- Canvas routines are used to draw nodes and edges: arcs for nodes and lines for edges.
+- Color maps are passed to the drawing procedures for dynamic highlighting.
 
-- **Responsive Design**:
-  - The canvas automatically adjusts scale based on tree depth and screen size.
+** 6. Scaling: **
 
-- **Thematic Aesthetic**:
-  - Dark “Matrix-style” visuals with neon green highlights.
-  - Binary-code background image enhances the techy atmosphere.
+- The canvas dynamically changes its zoom factor (scale) based on the depth of the tree so that it fits in the screen.
+ Project Features
+- Field to enter numerical values.
+- Insert, delete, and search buttons for values.
+- Buttons to trigger in-order, pre-order, and post-order traversals.
+- Real-time canvas drawings and animated visualizations.
+- Interactive notifications for missing nodes or duplicate insertion.
+- Neon green and matrix-style appearance with dark feel.
+- Adaptive scaling depending on screen size and tree depth.
+
+## Educational Value
+For developers and students, this image is a great teaching tool for learning the dynamics and structure of binary search trees.
+Animations give abstract ideas a concrete form and allow understanding.
