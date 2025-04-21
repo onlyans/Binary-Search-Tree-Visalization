@@ -1,8 +1,11 @@
 ## Project Documentation: Virtualization of Binary Search Tree
+
 **Askaruly Orken, Saukynbay Ansar, Muratov Aldiyar, and Daniyal Temirlan**
 
 ## PROJECT LINK:
 **https://github.com/onlyans/Binary-Search-Tree-Visalization** 
+
+
 
 ## What is a BST?
 A Binary Search Tree (BST) data structure contains a maximum of two children for each node. Every element in the right subtree is greater than the node's value, and every element in the left subtree is less than the node's value.
@@ -39,8 +42,9 @@ Using HTML, CSS, and JavaScript, the project uses the element to enable real-t
 
 **6. Scaling:**
 
-- The canvas dynamically changes its zoom factor (scale) based on the depth of the tree so that it fits in the screen.
- Project Features
+- The canvas dynamically changes its zoom factor (scale) based on the depth of the tree so that it fits in the screen.
+  
+ Project Features:
 - Field to enter numerical values.
 - Insert, delete, and search buttons for values.
 - Buttons to trigger in-order, pre-order, and post-order traversals.
