@@ -1,9 +1,9 @@
 
-##Project Documentation: Binary Search Tree Visualization 
+## Project Documentation: Binary Search Tree Visualization
 
 **Askaruly Orken, Daniyal Temirlan, Muratov Aldiyar, Saukynbay Ansar** 
 
-##What is a BST?
+## What is a BST?
 
 A **Binary Search Tree (BST)** is a type of binary tree where:
 - All elements in the **left subtree** of a node are **less than** the node’s value.
