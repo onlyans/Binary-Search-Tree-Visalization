@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>BST</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #000;
+      color: #e0ffe0;
+    }
+    header {
+      background-color: rgba(0, 30, 0, 0.9);
+      padding: 20px;
+      text-align: center;
+      color: #aaffaa;
+      font-size: 28px;
+      box-shadow: 0 0 10px #00ff00;
+    }
+    .controls {
+      text-align: center;
+      margin: 20px;
+    }
+    input[type="number"] {
+      padding: 8px;
+      width: 100px;
+      font-size: 16px;
+      border: 1px solid #00ff00;
+      background-color: #001f00;
+      color: #aaffaa;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      background-color: #003300;
+      color: #aaffaa;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover {
+      background-color: #005500;
+    }
+    canvas {
+      display: block;
+      margin: 0 auto;
+      background-image: url('https://png.pngtree.com/background/20240114/original/pngtree-matrix-and-green-binary-code-concept-binary-online-photo-picture-image_7271784.jpg');
+      background-size: cover;
+      background-position: center;
+      border-top: 2px solid #00ff00;
+    }
+    .output {
+      color: #aaffaa;
+      font-size: 18px;
+      margin: 20px;
+      text-align: center;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(2px);
+    }
+    .modal-content {
+      background-color: #001f00;
+      color: #aaffaa;
+      margin: 15% auto;
+      padding: 20px;
+      border: 2px solid #00ff00;
+      width: 300px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 15px #00ff00;
+    }
+    .modal-content button {
+      margin-top: 10px;
+      padding: 6px 12px;
+      font-size: 14px;
+      background-color: #003300;
+      color: #aaffaa;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .modal-content button:hover {
+      background-color: #005500;
+    }
+  </style>
+</head>
+<body onload="setup()">
+  
+  <header>Binary search tree visualization</header>
+
+  <div class="controls">
+    <input type="number" id="value" placeholder="Enter number:" />
+    <button onclick="insert()">Insert</button>
+    <button onclick="remove()">Delete</button>
+    <button onclick="search()">Search</button>
+    <button onclick="animateInOrder()">Inorder traversal</button>
+    <button onclick="animatePreOrder()">Preorder traversal</button>
+    <button onclick="animatePostOrder()">Postorder traversal</button>
+  </div>
+
+  <canvas id="canvas"></canvas>
+  <div class="output" id="output"></div>
+  <div id="custom-alert" class="modal">
+    <div class="modal-content">
+      <p id="alert-message"></p>
+      <button onclick="closeAlert()">OK</button>
+    </div>
+
+  </div>
+
+  <script>
+    let canvas, ctx, tree;
+    let vGap = 60;
+    let radius = 20;
+    let delay = 600;
+    let delay2y = 1000;
+    let scale = 1;
+
+    class TreeNode {
+      constructor(e) {
+        this.element = e;
+        this.left = null;
+        this.right = null;
+        this.x = 0;
+        this.y = 0;
+        this.width = 0;
+      }
+    }
+
+    class BST {
+      constructor() {
+        this.root = null;
+        this.size = 0;
+      }
+
+      insert(e) {
+        if (!this.root) {
+          this.root = new TreeNode(e);
+          this.size++;
+          return [this.root];
+        }
+        let path = [];
+        let current = this.root;
+        let parent = null;
+        while (current) {
+          path.push(current);
+          parent = current;
+          if (e < current.element) current = current.left;
+          else if (e > current.element) current = current.right;
+          else return path;
+        }
+        let node = new TreeNode(e);
+        if (e < parent.element) parent.left = node;
+        else parent.right = node;
+        this.size++;
+        path.push(node);
+        return path;
+      }
+
+      pathTo(e) {
+        let current = this.root;
+        let path = [];
+        while (current) {
+          path.push(current);
+          if (e < current.element) current = current.left;
+          else if (e > current.element) current = current.right;
+          else break;
+        }
+        return path;
+      }
+
+      getReplacementPath(node) {
+        let path = [];
+        let current = node.left;
+        if (!current) return path;
+        path.push(current);
+        while (current.right) {
+          current = current.right;
+          path.push(current);
+        }
+        return path;
+      }
+
+      removeWithAnimation(e) {
+        let path = [];
+        let parent = null;
+        let current = this.root;
+        while (current && current.element !== e) {
+          path.push(current);
+          parent = current;
+          if (e < current.element) current = current.left;
+          else current = current.right;
+        }
+        if (!current) return { found: false };
+        path.push(current);
+        let replacePath = this.getReplacementPath(current);
+        const execute = () => {
+          if (!current.left) {
+            if (!parent) this.root = current.right;
+            else if (current === parent.left) parent.left = current.right;
+            else parent.right = current.right;
+          } else {
+            let rightMost = current.left;
+            let parentOfRightMost = current;
+            while (rightMost.right) {
+              parentOfRightMost = rightMost;
+              rightMost = rightMost.right;
+            }
+            current.element = rightMost.element;
+            if (parentOfRightMost.right === rightMost) {
+              parentOfRightMost.right = rightMost.left;
+            } else {
+              parentOfRightMost.left = rightMost.left;
+            }
+          }
+          this.size--;
+        };
+        return { found: true, path, replacePath, execute };
+      }
+    }
+
+    function setup() {
+      canvas = document.getElementById("canvas");
+      ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth - 20;
+      canvas.height = window.innerHeight - 120;
+      tree = new BST();
+      redraw();
+    }
+
+    function computeWidths(node) {
+      if (!node) return 0;
+      const left = computeWidths(node.left);
+      const right = computeWidths(node.right);
+      node.width = Math.max(left + right, 1);
+      return node.width;
+    }
+
+    function assignCoordinates(node, x, y, hGap) {
+      if (!node) return;
+      node.x = x;
+      node.y = y;
+      const lw = node.left ? node.left.width : 0;
+      const rw = node.right ? node.right.width : 0;
+      if (node.left) assignCoordinates(node.left, x - hGap * (rw + 1), y + vGap, hGap / 1.5);
+      if (node.right) assignCoordinates(node.right, x + hGap * (lw + 1), y + vGap, hGap / 1.5);
+    }
+
+    function updateCoordinates() {
+      computeWidths(tree.root);
+      assignCoordinates(tree.root, canvas.width / 2, 50, 40);
+      autoAdjustZoom();
+    }
+
+    function autoAdjustZoom() {
+      let depth = getDepth(tree.root);
+      scale = Math.min(1, canvas.height / ((depth + 2) * vGap));
+    }
+
+    function getDepth(node) {
+      if (!node) return 0;
+      return 1 + Math.max(getDepth(node.left), getDepth(node.right));
+    }
+
+    function redraw(path = [], highlightMap = {}, extraNode = null) {
+      updateCoordinates();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(canvas.width / 2, 0);
+      ctx.scale(scale, scale);
+      ctx.translate(-canvas.width / 2, 0);
+      drawTree(tree.root, path, highlightMap);
+      if (extraNode) drawNode(extraNode);
+      ctx.restore();
+    }
+
+    function drawTree(node, path, highlightMap) {
+      if (!node) return;
+      if (node.left) {
+        const highlight = path.includes(node) && path.includes(node.left);
+        drawLine(node.x, node.y, node.left.x, node.left.y, highlight);
+        drawTree(node.left, path, highlightMap);
+      }
+      if (node.right) {
+        const highlight = path.includes(node) && path.includes(node.right);
+        drawLine(node.x, node.y, node.right.x, node.right.y, highlight);
+        drawTree(node.right, path, highlightMap);
+      }
+      drawNode(node, highlightMap[node.element]);
+    }
+
+    function drawLine(x1, y1, x2, y2, highlight = false) {
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = highlight ? "#ff3333" : "#00ff00";
+      ctx.stroke();
+    }
+
+    function drawNode(node, color) {
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
+      ctx.fillStyle = "#002200";
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = color || "#00ff00";
+      ctx.stroke();
+      ctx.fillStyle = "#aaffaa";
+      ctx.font = "16px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(node.element, node.x, node.y);
+    }
+
+    async function animatePath(path) {
+      for (let i = 0; i < path.length; i++) {
+        const map = {};
+        map[path[i].element] = "#ff0000";
+        redraw(path.slice(0, i + 1), map);
+        await new Promise(res => setTimeout(res, delay));
+      }
+    }
+
+    async function highlightNode(node, color) {
+      const map = {};
+      map[node.element] = color;
+      redraw([], map);
+      await new Promise(res => setTimeout(res, delay2y));
+    }
+
+    async function animateInOrderTraversal(node, result = []) {
+      if (!node) return;
+      await animateInOrderTraversal(node.left, result);
+      await highlightNode(node, "#ff0000");
+      await highlightNode(node, "#ffff00");
+      result.push(node.element);
+      await animateInOrderTraversal(node.right, result);
+    }
+
+    async function animateInOrder() {
+      const result = [];
+      await animateInOrderTraversal(tree.root, result);
+      document.getElementById("output").innerText = `Inorder: ${result.join(" -> ")}`;
+      redraw();
+    }
+
+    async function animatePreOrderTraversal(node, result = []) {
+      if (!node) return;
+      await highlightNode(node, "#ff0000"); 
+      await highlightNode(node, "#ffff00");  
+      result.push(node.element);  
+      await animatePreOrderTraversal(node.left, result);  
+      await animatePreOrderTraversal(node.right, result);  
+    }
+
+    async function animatePreOrder() {
+      const result = [];
+      await animatePreOrderTraversal(tree.root, result);
+      document.getElementById("output").innerText = `Preorder: ${result.join(" -> ")}`;
+      redraw();
+    }
+
+    async function animatePostOrderTraversal(node, result = []) {
+     if (!node) return;
+     await animatePostOrderTraversal(node.left, result);
+     await animatePostOrderTraversal(node.right, result);
+     await highlightNode(node, "#ff0000");
+     await highlightNode(node, "#ffff00");
+     result.push(node.element);
+}
+
+async function animatePostOrder() {
+  const result = [];
+  await animatePostOrderTraversal(tree.root, result);
+  document.getElementById("output").innerText = `Postorder: ${result.join(" -> ")}`;
+  redraw();
+}
+
+
+    async function insert() {
+      const value = parseInt(document.getElementById("value").value);
+      if (isNaN(value)) return;
+
+       const tempNode = new TreeNode(value);
+       tempNode.x = 50;
+       tempNode.y = 50;
+
+       const path = [];
+       let current = tree.root;
+       while (current) {
+        path.push(current);
+        if (value < current.element) current = current.left;
+        else if (value > current.element) current = current.right;
+        else {
+          showAlert("Element already exists.");
+        return;
+    }
+  }
+
+  redraw(path, {}, tempNode);
+  await new Promise(r => setTimeout(r, 600));
+
+  const finalPath = tree.insert(value);
+  const finalNode = finalPath[finalPath.length - 1];
+
+  updateCoordinates();
+
+  let steps = 20;
+  for (let i = 0; i <= steps; i++) {
+    tempNode.x = 50 + (finalNode.x - 50) * (i / steps);
+    tempNode.y = 50 + (finalNode.y - 50) * (i / steps);
+    redraw(finalPath, {}, tempNode);  
+    await new Promise(r => setTimeout(r, 30));
+  }
+
+  redraw();
+}
+
+
+
+    async function search() {
+      const value = parseInt(document.getElementById("value").value);
+      if (isNaN(value)) return;
+      const path = tree.pathTo(value);
+      if (path.length === 0 || path[path.length - 1].element !== value) {
+        await animatePath(path);
+        showAlert("Element not found in the tree.");
+        return;
+      }
+      await animatePath(path);
+    }
+
+    async function remove() {
+      const value = parseInt(document.getElementById("value").value);
+      if (isNaN(value)) return;
+      const result = tree.removeWithAnimation(value);
+      await animatePath(result.path);
+      await highlightNode(result.path[result.path.length - 1], "#008B8B");
+      if (result.replacePath.length > 0) {
+        await animatePath(result.replacePath);
+        await highlightNode(result.replacePath[result.replacePath.length - 1], "#008B8B");
+      }
+      result.execute();
+      redraw();
+    }
+
+    function showAlert(message) {
+      document.getElementById("alert-message").innerText = message;
+      document.getElementById("custom-alert").style.display = "block";
+    }
+
+    function closeAlert() {
+      document.getElementById("custom-alert").style.display = "none";
+    }
+  </script>
+</body>
+</html>
