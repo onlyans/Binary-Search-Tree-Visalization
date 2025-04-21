@@ -26,13 +26,13 @@ Using HTML, CSS, and JavaScript, the project uses the element to enable real-t
 
 **3. Animation Functions**
 
-- Animations are used to show search paths and traversals.
-- Async/await is used to achieve these using color switches and waits.
-- Highlight effects are used to graphically depict step-by-step in-order, pre-order, and post-order traversals.
+- Animations are used to show search paths and traversals.
+- Async/await is used to achieve these using color switches and waits.
+- Highlight effects are used to graphically depict step-by-step in-order, pre-order, and post-order traversals.
 
 **4. Coordinate Calculation:**
 
-- Widths of every subtree are computed to display nodes at proper positions.
+- Widths of every subtree are computed to display nodes at proper positions.
 - To provide enough space and prevent overlap, X and Y coordinates are assigned recursively using subtree widths and levels.
 
 **5. Drawing**
